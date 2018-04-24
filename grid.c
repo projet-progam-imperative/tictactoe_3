@@ -41,21 +41,44 @@ void draw(board main_board){
     }
 }
 
-int win(board main_board ,int choix){
-    int i;
-    for(i = 0; i; i++){
+int win(board main_board){
+    int a, b, c, d, e, f, g, h;
+    a = main_board.tab[main_board.num_grid].tab[0] + main_board.tab[main_board.num_grid].tab[1] + main_board.tab[main_board.num_grid].tab[2];
+    b = main_board.tab[main_board.num_grid].tab[3] + main_board.tab[main_board.num_grid].tab[4] + main_board.tab[main_board.num_grid].tab[5];
+    c = main_board.tab[main_board.num_grid].tab[6] + main_board.tab[main_board.num_grid].tab[7] + main_board.tab[main_board.num_grid].tab[8];
+    d = main_board.tab[main_board.num_grid].tab[0] + main_board.tab[main_board.num_grid].tab[3] + main_board.tab[main_board.num_grid].tab[6];
+    e = main_board.tab[main_board.num_grid].tab[2] + main_board.tab[main_board.num_grid].tab[4] + main_board.tab[main_board.num_grid].tab[7];
+    f = main_board.tab[main_board.num_grid].tab[3] + main_board.tab[main_board.num_grid].tab[5] + main_board.tab[main_board.num_grid].tab[8];
+    g = main_board.tab[main_board.num_grid].tab[0] + main_board.tab[main_board.num_grid].tab[4] + main_board.tab[main_board.num_grid].tab[8];
+    h = main_board.tab[main_board.num_grid].tab[2] + main_board.tab[main_board.num_grid].tab[4] + main_board.tab[main_board.num_grid].tab[6];
+    if(a == 3 || b == 3 || c == 3 || d == 3 || e == 3 || f == 3 || g == 3 || h == 3){
+        return 1;
     }
+    if(a == -3 || b == -3 || c == -3 || d == -3 || e == -3 || f == -3 || g == -3 || h == -3){
+        return -1;
+    }
+    return 0;
 }
 
 int main(){
     board plateau;
     plateau = init(plateau);
     int c=0;
-    while(plateau.num_grid < 9){
+    int winner = 0;
+    while(winner == 0){
         draw(plateau);
         printf("entrer le num de la case (0 -> 8)");
         scanf("%d",&c);
         plateau = turn(plateau,c);
+        winner = win(plateau);
+        printf("%d\n\n",winner);
+    }
+    draw(plateau);
+    switch(winner){
+        case 1:
+            printf("Le joueur 1 a gagné\n");
+        case -1:
+            printf("Le joueur 1 a gagné\n");
     }
     return 0;
 }
