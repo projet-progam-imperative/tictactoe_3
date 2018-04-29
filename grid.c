@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct{
     int tab[9] ;
@@ -60,7 +61,7 @@ int win(board main_board){
     return 0;
 }
 
-int main(){
+int game_JCJ(){
     board plateau;
     plateau = init(plateau);
     int c=0;
@@ -71,14 +72,43 @@ int main(){
         scanf("%d",&c);
         plateau = turn(plateau,c);
         winner = win(plateau);
-        printf("%d\n\n",winner);
     }
     draw(plateau);
+    return winner;
+}
+
+int game_JCP_alea(){
+    board plateau;
+    plateau = init(plateau);
+    int c=0;
+    int winner = 0;
+    while(winner == 0){
+        if(plateau.player == 1){
+            draw(plateau);
+            printf("entrer le num de la case (0 -> 8)");
+            scanf("%d",&c);
+            plateau = turn(plateau,c);
+        }else{
+            int IA_turn;
+            IA_turn = rand() % 9;
+            plateau = turn(plateau, IA_turn);
+        }
+        winner = win(plateau);
+    }
+    draw(plateau);
+    return winner;
+}
+
+int main(){
+    int winner;
+    winner = game_JCP_alea();
     switch(winner){
         case 1:
             printf("Le joueur 1 a gagné\n");
+            break;
         case -1:
-            printf("Le joueur 1 a gagné\n");
+            printf("Le joueur 2 a gagné\n");
+            break;
     }
     return 0;
 }
