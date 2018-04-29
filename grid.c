@@ -9,6 +9,7 @@ typedef struct{
     grid tab[9] ;
     int player ;
     int num_grid;
+    int last_grid;
 }board;
 
 board init(board main_board){
@@ -25,6 +26,7 @@ board init(board main_board){
 
 board turn(board main_board, int num_case){
     if(main_board.tab[main_board.num_grid].tab[num_case] == 0){
+        main_board.last_grid = main_board.num_grid;
         main_board.tab[main_board.num_grid].tab[num_case] = main_board.player;
         main_board.player *= -1;
         main_board.num_grid = num_case;
@@ -44,14 +46,14 @@ void draw(board main_board){
 
 int win(board main_board){
     int a, b, c, d, e, f, g, h;
-    a = main_board.tab[main_board.num_grid].tab[0] + main_board.tab[main_board.num_grid].tab[1] + main_board.tab[main_board.num_grid].tab[2];
-    b = main_board.tab[main_board.num_grid].tab[3] + main_board.tab[main_board.num_grid].tab[4] + main_board.tab[main_board.num_grid].tab[5];
-    c = main_board.tab[main_board.num_grid].tab[6] + main_board.tab[main_board.num_grid].tab[7] + main_board.tab[main_board.num_grid].tab[8];
-    d = main_board.tab[main_board.num_grid].tab[0] + main_board.tab[main_board.num_grid].tab[3] + main_board.tab[main_board.num_grid].tab[6];
-    e = main_board.tab[main_board.num_grid].tab[2] + main_board.tab[main_board.num_grid].tab[4] + main_board.tab[main_board.num_grid].tab[7];
-    f = main_board.tab[main_board.num_grid].tab[3] + main_board.tab[main_board.num_grid].tab[5] + main_board.tab[main_board.num_grid].tab[8];
-    g = main_board.tab[main_board.num_grid].tab[0] + main_board.tab[main_board.num_grid].tab[4] + main_board.tab[main_board.num_grid].tab[8];
-    h = main_board.tab[main_board.num_grid].tab[2] + main_board.tab[main_board.num_grid].tab[4] + main_board.tab[main_board.num_grid].tab[6];
+    a = main_board.tab[main_board.last_grid].tab[0] + main_board.tab[main_board.last_grid].tab[1] + main_board.tab[main_board.last_grid].tab[2];
+    b = main_board.tab[main_board.last_grid].tab[3] + main_board.tab[main_board.last_grid].tab[4] + main_board.tab[main_board.last_grid].tab[5];
+    c = main_board.tab[main_board.last_grid].tab[6] + main_board.tab[main_board.last_grid].tab[7] + main_board.tab[main_board.last_grid].tab[8];
+    d = main_board.tab[main_board.last_grid].tab[0] + main_board.tab[main_board.last_grid].tab[3] + main_board.tab[main_board.last_grid].tab[6];
+    e = main_board.tab[main_board.last_grid].tab[2] + main_board.tab[main_board.last_grid].tab[4] + main_board.tab[main_board.last_grid].tab[7];
+    f = main_board.tab[main_board.last_grid].tab[3] + main_board.tab[main_board.last_grid].tab[5] + main_board.tab[main_board.last_grid].tab[8];
+    g = main_board.tab[main_board.last_grid].tab[0] + main_board.tab[main_board.last_grid].tab[4] + main_board.tab[main_board.last_grid].tab[8];
+    h = main_board.tab[main_board.last_grid].tab[2] + main_board.tab[main_board.last_grid].tab[4] + main_board.tab[main_board.last_grid].tab[6];
     if(a == 3 || b == 3 || c == 3 || d == 3 || e == 3 || f == 3 || g == 3 || h == 3){
         return 1;
     }
