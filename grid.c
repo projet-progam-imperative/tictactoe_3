@@ -1,32 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include<grid.h>
+#include <IA.h>
+#include <IAaleatoire.h>
 
-typedef struct{
-    int tab[9] ;
-}grid;
-
-typedef struct{
-    grid tab[9] ;
-    int player ;
-    int num_grid;
-    int last_grid;
-}board;
-
-int board_equal(board a, board b){
-    int i, j;
-    for(i = 0;i<9;i++){
-        for(j = 0;j<9;j++){
-            if(a.tab[i].tab[j] != b.tab[i].tab[j]){
-                return 0;
-            }
-        }
-    }
-    if(a.num_grid != b.num_grid) return 0;
-    if(a.player != b.player) return 0;
-    if(a.last_grid != b.last_grid) return 0;
-    return 1;
-}
-
+//fonction qui initialise le plateau de jeu
 board init(board main_board){
     int i,j;
     for(i = 0;i<9;i++){
@@ -39,6 +16,7 @@ board init(board main_board){
     return main_board;
 }
 
+//fonction qui test si la grille dans laquelle le joueur joue est remplie
 int full_grid(board main_board){
     int i;
     for(i=0;i<9;i++){
@@ -49,6 +27,7 @@ int full_grid(board main_board){
     return 0;
 }
 
+//fonction qui applique la decision des joueur sur le plateau
 board turn(board main_board, int num_case){
     if(full_grid(main_board)){
         if(main_board.tab[main_board.num_grid].tab[num_case] == 0){
@@ -63,23 +42,22 @@ board turn(board main_board, int num_case){
     return main_board;
 }
 
-board turn_IA_alea(board main_board){
-    int IA_turn;
-    IA_turn = rand() % 9;
-    main_board = turn(main_board, IA_turn);
-    return main_board;
-}
-
+//fonction temporaire qui dessine une representation dans le terminal
 void draw(board main_board){
-    int i,j;
+    int i,j,k;
     for(i = 0;i<9;i++){
-        for(j = 0;j<9;j++){
-            printf("%d ",main_board.tab[i].tab[j]);
+        printf("\n\n");
+        for(j = 0;j<3;j++){
+            for(k = 0;k<3;k++){
+                printf("%d ",main_board.tab[i].tab[j*3+k]);
+            }
+            printf("\t");
         }
-        printf("\n \n");
     }
+    printf("\n");
 }
 
+//fonction qui calcule si un joueur a gagner
 int win(board main_board){
     int a, b, c, d, e, f, g, h;
     a = main_board.tab[main_board.last_grid].tab[0] + main_board.tab[main_board.last_grid].tab[1] + main_board.tab[main_board.last_grid].tab[2];
@@ -99,53 +77,7 @@ int win(board main_board){
     return 0;
 }
 
-int decision(int taille, int* tab){
-    int max, i, index;
-    index = 0;
-    max = tab[0];
-    for(i=0;i<taille;i++){
-        if(max > tab[i]){
-            max = tab[i];
-            index = i;
-        }
-    }
-    return index;
-}
-
-board turn_IA_simulation(board simul){
-    int i,taille = 0;
-    board possible_tmp[9];
-    for(i=0;i<9;i++){
-        possible_tmp[i] = turn(simul,i);
-        if(board_equal(possible_tmp[i], simul) != 1){
-            taille += 1;
-        }
-    }
-    board possible[taille];
-    int index = 0;
-    for(i=0;i<9;i++){
-        if(board_equal(possible_tmp[i], simul) != 1){
-            possible[index] = possible_tmp[i];
-            index +=1;
-        }
-    }
-    int possible_val[taille] ;
-    for(i=0;i<taille;i++){
-        possible_val[i] = 0;
-        int j;
-        for(j=0;j<100;j++){
-            board test = possible[i];
-            int winner = 0;
-            while(winner == 0){
-                test = turn_IA_alea(test);
-                winner = win(test);
-            }
-            possible_val[i] += winner;
-        }
-    }
-    return simul = possible[decision(taille, possible_val)];
-}
-
+//fonction qui gère les tours en joueur vs joueur
 int game_JCJ(){
     board plateau;
     plateau = init(plateau);
@@ -156,46 +88,6 @@ int game_JCJ(){
         printf("entrer le num de la case (0 -> 8)");
         scanf("%d",&c);
         plateau = turn(plateau,c);
-        winner = win(plateau);
-    }
-    draw(plateau);
-    return winner;
-}
-
-int game_JCP_alea(){
-    board plateau;
-    plateau = init(plateau);
-    int c=0;
-    int winner = 0;
-    while(winner == 0){
-        if(plateau.player == 1){
-            draw(plateau);
-            printf("entrer le num de la case (0 -> 8)");
-            scanf("%d",&c);
-            plateau = turn(plateau,c);
-        }else{
-            plateau = turn_IA_alea(plateau);
-        }
-        winner = win(plateau);
-    }
-    draw(plateau);
-    return winner;
-}
-
-int game_JCP_IA(){
-    board plateau;
-    plateau = init(plateau);
-    int c=0;
-    int winner = 0;
-    while(winner == 0){
-        if(plateau.player == 1){
-            draw(plateau);
-            printf("entrer le num de la case (0 -> 8)");
-            scanf("%d",&c);
-            plateau = turn(plateau,c);
-        }else{
-            plateau = turn_IA_simulation(plateau);
-        }
         winner = win(plateau);
     }
     draw(plateau);
