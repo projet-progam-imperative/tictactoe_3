@@ -20,13 +20,20 @@ int board_equal(board a, board b){
 }
 
 //fonction qui permet a l'IA de choisir la case sur laquelle jouer
-int decision(int taille, int* tab){
-    int max, i, index;
-    index = 0;
-    max = tab[0];
+int decision(int taille, esperance* tab){
+    int index, i;
+    float esp[taille], max;
     for(i=0;i<taille;i++){
-        if(max > tab[i]){
-            max = tab[i];
+        float proba_gain, proba_perte;
+        proba_gain = tab[i].gain / tab[i].nb_simulation;
+        proba_perte = tab[i].perte / tab[i].nb_simulation;
+        esp[i] = (proba_gain * tab[i].gain) - (proba_perte * tab[i].perte);
+    }
+    index = 0;
+    max = esp[0];
+    for(i=0;i<taille;i++){
+        if(max < esp[i]){
+            max = esp[i];
             index = i;
         }
     }
@@ -51,18 +58,27 @@ board turn_IA_simulation(board simul){
             index +=1;
         }
     }
-    int possible_val[taille] ;
+    esperance possible_val[taille] ;
     for(i=0;i<taille;i++){
-        possible_val[i] = 0;
+        possible_val[i].nb_simulation = 1000;
+        possible_val[i].gain = 0;
+        possible_val[i].perte = 0;
         int j;
-        for(j=0;j<1000;j++){
+        for(j=0;j<possible_val[0].nb_simulation;j++){
             board test = possible[i];
             int winner = 0;
             while(winner == 0){
                 test = turn_IA_alea(test);
                 winner = win(test);
             }
-            possible_val[i] += winner;
+            switch(winner){
+                case -1:
+                    possible_val[i].gain +=1;
+                    break;
+                case 1:
+                    possible_val[i].perte +=1;
+                    break;
+            }
         }
     }
     return simul = possible[decision(taille, possible_val)];

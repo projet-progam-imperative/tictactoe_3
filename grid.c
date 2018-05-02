@@ -51,7 +51,7 @@ void draw(board main_board){
             for(k = 0;k<3;k++){
                 printf("%d ",main_board.tab[i].tab[j*3+k]);
             }
-            printf("\t");
+            printf("   ");
         }
     }
     printf("\n");
