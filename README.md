@@ -8,6 +8,6 @@
 
 ---
 
-Project made with [SDL 2.0.8][sdl-link].
+Project made with [SDL 2.0][sdl-link].
 
 [sdl-link]: https://www.libsdl.org/download-2.0.php
