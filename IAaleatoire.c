@@ -21,7 +21,10 @@ int game_JCP_alea(){
         if(plateau.player == 1){
             draw(plateau);
             printf("entrer le num de la case (0 -> 8)");
-            scanf("%d",&c);
+            while(c > 57 || c < 47){
+                c = getchar();
+            }
+            c = c - 48;
             plateau = turn(plateau,c);
         }else{
             plateau = turn_IA_alea(plateau);

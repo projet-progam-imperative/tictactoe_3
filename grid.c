@@ -81,12 +81,15 @@ int win(board main_board){
 int game_JCJ(){
     board plateau;
     plateau = init(plateau);
-    int c=0;
+    int c = 0;
     int winner = 0;
     while(winner == 0){
         draw(plateau);
         printf("entrer le num de la case (0 -> 8)");
-        scanf("%d",&c);
+        while(c > 57 || c < 47){
+            c = getchar();
+        }
+        c = c - 48;
         plateau = turn(plateau,c);
         winner = win(plateau);
     }
