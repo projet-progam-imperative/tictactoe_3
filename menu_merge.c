@@ -16,6 +16,9 @@ int main(int argc, char *argv[]){
   // Déclaration images
   SDL_Surface* menuImg= SDL_LoadBMP("img/menu.bmp");
   SDL_Surface* grilleImg= SDL_LoadBMP("img/grille.bmp");
+  SDL_Surface* croixImg= SDL_LoadBMP("img/croix.bmp");
+  SDL_Surface* rondImg= SDL_LoadBMP("img/rond.bmp");
+
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0 ){ //Gestion des erreurs d'init
       fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
@@ -26,7 +29,7 @@ int main(int argc, char *argv[]){
   fenetre = SDL_CreateWindow("TicTacToe - Power 3", SDL_WINDOWPOS_CENTERED,
                                                 SDL_WINDOWPOS_CENTERED,
                                                 780, 780,
-                                                SDL_WINDOW_RESIZABLE);
+                                                SDL_WINDOW_SHOWN);
 
   if(fenetre == NULL) //Gestion des erreurs fenêtre
   {
@@ -43,11 +46,24 @@ int main(int argc, char *argv[]){
       return EXIT_FAILURE;
   }
 
-  if(!menuImg || !grilleImg)//gestion des erreurs images
+  if(!menuImg || !grilleImg || !croixImg || !rondImg)//gestion des erreurs images
   {
       printf("Erreur de chargement de l'image : %s",SDL_GetError());
       return -1;
   }
+
+
+  //La texture grilleTexture contient maintenant l'image grilleImg
+  SDL_Texture* grilleTexture = SDL_CreateTextureFromSurface(renderer,grilleImg);
+  SDL_FreeSurface(grilleImg);
+
+  //La texture de la croix
+  SDL_Texture* croixTexture = SDL_CreateTextureFromSurface(renderer,croixImg);
+  SDL_FreeSurface(croixImg);
+
+  //La texture du rond
+  SDL_Texture* rondTexture = SDL_CreateTextureFromSurface(renderer,rondImg);
+  SDL_FreeSurface(rondImg);
 
   //La texture menuTexture contient maintenant l'image menuImg
   SDL_Texture* menuTexture = SDL_CreateTextureFromSurface(renderer,menuImg);
@@ -73,23 +89,6 @@ int main(int argc, char *argv[]){
 
               if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 300 <= a && 482 >= a && 351 <= b && 411 >= b){
                 printf("Jouer\n");
-
-                //La texture grilleTexture contient maintenant l'image menuImg
-                SDL_Texture* grilleTexture = SDL_CreateTextureFromSurface(renderer,grilleImg);
-                SDL_FreeSurface(grilleImg);
-
-                //Affichage de grilleTexture
-                SDL_Rect position;
-                position.x = 0;
-                position.y = 0;
-                SDL_QueryTexture(grilleTexture, NULL, NULL, &position.w, &position.h);
-                SDL_RenderCopy(renderer,grilleTexture,NULL,&position);
-                SDL_RenderPresent(renderer);
-
-                //game_start();
-
-                //SDL_Delay(500); //Pause de 1/2 seconde
-
                 cont = 0;
               }
           }
@@ -113,7 +112,6 @@ int main(int argc, char *argv[]){
                 plateau.state = QUIT_STATE;
                 break;
 
-              //if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1)) {
               case SDL_MOUSEBUTTONDOWN:
                 a = e.button.x;
                 b = e.button.y;
@@ -122,6 +120,7 @@ int main(int argc, char *argv[]){
                 c = a - (a % 60);
                 d = b - (b % 60);
                 fprintf(stdout, "Modulo : %d;%d\n",c,d);
+                fprintf(stdout, "Modulo : %d;%d\n",(a / 60),(b / 60));
 
                 if ( (c!=0) && (c!=240) && (c!=480) && (c!=720) && (d!=0) && (d!=240) && (d!=480) && (d!=720) ) {
                   click_on_cell(&plateau, c, d);
@@ -134,13 +133,15 @@ int main(int argc, char *argv[]){
         }
 
         SDL_RenderClear(renderer);
-        render_game(renderer, &plateau);
+        render_game(renderer, &plateau, grilleTexture, croixTexture, rondTexture);
         SDL_RenderPresent(renderer);
+        //SDL_Delay(1000);
+
 
       }
 
       // Destruction
-      //SDL_DestroyRenderer(renderer);
+      SDL_DestroyRenderer(renderer);
       SDL_DestroyWindow(fenetre);
 
       // Quitter SDL
@@ -161,6 +162,6 @@ board init(board main_board){
     }
     main_board.player = PLAYER_X;
     main_board.state = RUNNING_STATE;
-    //main_board.num_grid = 4;
+    main_board.num_grid = 4;
     return main_board;
 }
