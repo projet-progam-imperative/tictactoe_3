@@ -1,10 +1,13 @@
 # Just a tic tac toe, but power 3 !
 
-## Rules
+## Types of Gameplay
 
-- Rule 1
-- Rule 2
-- Rule 3
+- Player vs Player
+- Player vs IA Random
+- Player vs Real IA
+- IA Random vs Real IA
+- IA Random vs IA Random
+- Real IA vs Real IA
 
 ---
 
