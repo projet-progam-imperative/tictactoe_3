@@ -94,6 +94,10 @@ int main(int argc, char *argv[]){
   SDL_RenderCopy(renderer,menuTexture,NULL,&position);
   SDL_RenderPresent(renderer);
 
+  // Initialisation plateu de jeux
+  board plateau;
+  plateau = init(plateau);
+
   if (fenetre){
   char cont = 1; /* Détermine si on continue la boucle principale */
 
@@ -111,9 +115,6 @@ int main(int argc, char *argv[]){
           }
       }
 
-      board plateau;
-      plateau = init(plateau);
-
       SDL_Event e;
       while (plateau.state != QUIT_STATE) {
 
@@ -129,21 +130,27 @@ int main(int argc, char *argv[]){
                 plateau.state = QUIT_STATE;
                 break;
 
-              case SDL_MOUSEBUTTONUP:
-                a = e.button.x;
-                b = e.button.y;
+              if (plateau.state != MENU_STATE) {
 
-                fprintf(stdout, "Position de la souris : %d;%d\n",a,b);
-                c = a - (a % 60);
-                d = b - (b % 60);
-                fprintf(stdout, "Modulo : %d;%d\n",c,d);
-                fprintf(stdout, "Modulo : %d;%d\n",(a / 60),(b / 60));
+                  case SDL_MOUSEBUTTONUP:
+                    a = e.button.x;
+                    b = e.button.y;
 
-                if ( (c!=0) && (c!=240) && (c!=480) && (c!=720) && (d!=0) && (d!=240) && (d!=480) && (d!=720) ) {
-                  click_on_cell(&plateau, c, d);
-                }
+                    fprintf(stdout, "Position de la souris : %d;%d\n",a,b);
+                    c = a - (a % 60);
+                    d = b - (b % 60);
+                    fprintf(stdout, "Modulo : %d;%d\n",c,d);
+                    fprintf(stdout, "Modulo : %d;%d\n",(a / 60),(b / 60));
 
-                break;
+                    if ( plateau.state == 0 && (c!=0) && (c!=240) && (c!=480) && (c!=720) && (d!=0) && (d!=240) && (d!=480) && (d!=720) ) {
+                      click_on_cell(&plateau, c, d);
+                    }
+                    else{
+                      click_on_cell(&plateau, c, d);
+                    }
+
+                    break;
+              }
 
             default: {}
            }
@@ -176,7 +183,6 @@ board init(board main_board){
         }
     }
     main_board.player = PLAYER_X;
-    main_board.state = RUNNING_STATE;
-    main_board.num_grid = 4;
+    main_board.state = MENU_STATE;
     return main_board;
 }

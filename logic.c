@@ -30,6 +30,17 @@ int full_grid(board *plateau){
     return 0;
 }
 
+int new_board(board *plateau){
+    for(int i = 0;i<9;i++){
+        for(int j = 0;j<9;j++){
+            if(plateau->tab[i].tab[j] == 1 || plateau->tab[i].tab[j] == -1){
+              return 0;
+            }
+        }
+    }
+    return 1;
+}
+
 int tie_state(board *plateau){
     for(int i = 0;i<9;i++){
         for(int j = 0;j<9;j++){
@@ -134,6 +145,10 @@ void player_turn(board *plateau, int x, int y) {
 
     int num_case = get_case(x, y);
     int num_grid = get_grid(x, y);
+
+    if (new_board(plateau)) {
+      plateau->num_grid = num_grid;
+    }
 
     if (full_grid(plateau)) {
       if (plateau->tab[num_grid].tab[num_case] == 0) {

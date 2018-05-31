@@ -5,6 +5,7 @@
 #define PLAYER_X 1
 #define PLAYER_O -1
 
+#define MENU_STATE 5
 #define RUNNING_STATE 0
 #define PLAYER_X_WON_STATE 1
 #define PLAYER_O_WON_STATE 2
