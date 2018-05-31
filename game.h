@@ -12,6 +12,13 @@
 #define TIE_STATE 3
 #define QUIT_STATE 4
 
+#define P_VS_P 1
+#define P_VS_IAE 2
+#define P_VS_IAH 3
+#define IAE_VS_IAH 4
+#define IAE_VS_IAE 5
+#define IAH_VS_IAH 6
+
 typedef struct{
     int tab[9] ;
 }grid;
@@ -22,6 +29,7 @@ typedef struct{
     int num_grid;
     int last_grid;
     int state;
+    int vs;
 }board;
 
 board init(board main_board);

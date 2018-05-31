@@ -107,10 +107,35 @@ int main(int argc, char *argv[]){
               int a;
               int b;
 
-              if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 300 <= a && 482 >= a && 351 <= b && 411 >= b){
-                printf("Jouer\n");
+              if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 263 <= a && 518 >= a && 334 <= b && 367 >= b){
+                printf("P_VS_P\n");
+                plateau.vs = P_VS_P;
                 cont = 0;
-                //SDL_Delay(2000);
+              }
+              if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 256 <= a && 522 >= a && 398 <= b && 433 >= b){
+                printf("P_VS_IAE\n");
+                plateau.vs = P_VS_IAE;
+                cont = 0;
+              }
+              if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 255 <= a && 524 >= a && 468 <= b && 498 >= b){
+                printf("P_VS_IAH\n");
+                plateau.vs = P_VS_IAH;
+                cont = 0;
+              }
+              if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 246 <= a && 533 >= a && 532 <= b && 560 >= b){
+                printf("IAE_VS_IAH\n");
+                plateau.vs = IAE_VS_IAH;
+                cont = 0;
+              }
+              if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 244 <= a && 531 >= a && 590 <= b && 626 >= b){
+                printf("IAE_VS_IAE\n");
+                plateau.vs = IAE_VS_IAE;
+                cont = 0;
+              }
+              if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 244 <= a && 534 >= a && 654 <= b && 683 >= b){
+                printf("P_VS_P\n");
+                plateau.vs = IAH_VS_IAH;
+                cont = 0;
               }
           }
       }
@@ -140,7 +165,6 @@ int main(int argc, char *argv[]){
                     c = a - (a % 60);
                     d = b - (b % 60);
                     fprintf(stdout, "Modulo : %d;%d\n",c,d);
-                    fprintf(stdout, "Modulo : %d;%d\n",(a / 60),(b / 60));
 
                     if ( plateau.state == 0 && (c!=0) && (c!=240) && (c!=480) && (c!=720) && (d!=0) && (d!=240) && (d!=480) && (d!=720) ) {
                       click_on_cell(&plateau, c, d);

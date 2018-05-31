@@ -1,5 +1,6 @@
 #include <game.h>
 #include <logic.h>
+#include <ia.h>
 
 int win(board *plateau){
     int a, b, c, d, e, f, g, h;
@@ -141,7 +142,6 @@ int get_grid(int x, int y){
 }
 
 void player_turn(board *plateau, int x, int y) {
-  //if(plateau.tab[plateau.num_grid].tab[num_case] == 0)
 
     int num_case = get_case(x, y);
     int num_grid = get_grid(x, y);
@@ -180,7 +180,13 @@ void reset_game(board *plateau)
 void click_on_cell(board *plateau, int x, int y) {
 
     if (plateau->state == RUNNING_STATE) {
+      if (plateau->vs == P_VS_P) {
         player_turn(plateau, x, y);
+      }
+      if (plateau->vs == P_VS_IAH) {
+        ia_turn(plateau, x, y);
+      }
+
     }
     else {
         reset_game(plateau);
