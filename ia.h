@@ -12,4 +12,5 @@
     int decision(int taille, esperance* tab);
     board turn_IA_simulation(board *simul);
     void ia_turn(board *plateau, int x, int y);
+    board sim_player_turn(board plateau, int num_case);
 #endif // IAH_

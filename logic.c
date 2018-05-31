@@ -1,6 +1,7 @@
 #include <game.h>
 #include <logic.h>
 #include <ia.h>
+#include <ia_aleatoire.h>
 
 int win(board *plateau){
     int a, b, c, d, e, f, g, h;
@@ -182,6 +183,9 @@ void click_on_cell(board *plateau, int x, int y) {
     if (plateau->state == RUNNING_STATE) {
       if (plateau->vs == P_VS_P) {
         player_turn(plateau, x, y);
+      }
+      if (plateau->vs == P_VS_IAE) {
+        ia_alea_turn(plateau, x, y);
       }
       if (plateau->vs == P_VS_IAH) {
         ia_turn(plateau, x, y);
