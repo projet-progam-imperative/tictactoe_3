@@ -184,10 +184,10 @@ void click_on_cell(board *plateau, int x, int y) {
       if (plateau->vs == P_VS_P) {
         player_turn(plateau, x, y);
       }
-      if (plateau->vs == P_VS_IAE) {
+      if (plateau->vs == P_VS_IAE || plateau->vs == IAE_VS_IAE || plateau->vs == IAE_VS_IAH) {
         ia_alea_turn(plateau, x, y);
       }
-      if (plateau->vs == P_VS_IAH) {
+      if (plateau->vs == P_VS_IAH || plateau->vs == IAH_VS_IAH) {
         ia_turn(plateau, x, y);
       }
 

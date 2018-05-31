@@ -19,14 +19,6 @@ board sim_player_turn(board plateau, int num_case){
   return plateau;
 }
 
-//fonction qui applique la decision de l'IA aleatoire sur le plateau
-//board turn_IA_alea(board main_board){
-    //int IA_turn;
-    //IA_turn = rand() % 9;
-    //main_board = sim_player_turn(main_board, IA_turn);
-    //return main_board;
-//}
-
 //fonction qui test si deux plateaux sont egaux
 int board_equal(board a, board *b){
     int i, j;
@@ -119,6 +111,7 @@ void ia_turn(board *plateau, int x, int y) {
 
   else {
     *plateau = turn_IA_simulation(plateau);
+    game_over_condition(plateau);
   }
 
 
