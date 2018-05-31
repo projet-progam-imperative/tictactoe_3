@@ -18,6 +18,9 @@ int main(int argc, char *argv[]){
   SDL_Surface* grilleImg= SDL_LoadBMP("img/grille.bmp");
   SDL_Surface* croixImg= SDL_LoadBMP("img/croix.bmp");
   SDL_Surface* rondImg= SDL_LoadBMP("img/rond.bmp");
+  SDL_Surface* x_winImg= SDL_LoadBMP("img/win_x_note.bmp");
+  SDL_Surface* o_winImg= SDL_LoadBMP("img/win_o_note.bmp");
+  SDL_Surface* tie_stateImg= SDL_LoadBMP("img/tie_state_note.bmp");
 
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0 ){ //Gestion des erreurs d'init
@@ -46,7 +49,8 @@ int main(int argc, char *argv[]){
       return EXIT_FAILURE;
   }
 
-  if(!menuImg || !grilleImg || !croixImg || !rondImg)//gestion des erreurs images
+  //gestion de l'erreur de chargement d'une des images
+  if(!menuImg || !grilleImg || !croixImg || !rondImg || ! x_winImg || !o_winImg || !tie_stateImg )
   {
       printf("Erreur de chargement de l'image : %s",SDL_GetError());
       return -1;
@@ -64,6 +68,18 @@ int main(int argc, char *argv[]){
   //La texture du rond
   SDL_Texture* rondTexture = SDL_CreateTextureFromSurface(renderer,rondImg);
   SDL_FreeSurface(rondImg);
+
+  //La texture écran x gagne
+  SDL_Texture* x_winTexture = SDL_CreateTextureFromSurface(renderer,x_winImg);
+  SDL_FreeSurface(x_winImg);
+
+  //La texture écran o gagne
+  SDL_Texture* o_winTexture = SDL_CreateTextureFromSurface(renderer,o_winImg);
+  SDL_FreeSurface(o_winImg);
+
+  // La texture écran égalité
+  SDL_Texture* tie_stateTexture = SDL_CreateTextureFromSurface(renderer,tie_stateImg);
+  SDL_FreeSurface(tie_stateImg);
 
   //La texture menuTexture contient maintenant l'image menuImg
   SDL_Texture* menuTexture = SDL_CreateTextureFromSurface(renderer,menuImg);
@@ -90,6 +106,7 @@ int main(int argc, char *argv[]){
               if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 300 <= a && 482 >= a && 351 <= b && 411 >= b){
                 printf("Jouer\n");
                 cont = 0;
+                //SDL_Delay(2000);
               }
           }
       }
@@ -112,7 +129,7 @@ int main(int argc, char *argv[]){
                 plateau.state = QUIT_STATE;
                 break;
 
-              case SDL_MOUSEBUTTONDOWN:
+              case SDL_MOUSEBUTTONUP:
                 a = e.button.x;
                 b = e.button.y;
 
@@ -133,10 +150,8 @@ int main(int argc, char *argv[]){
         }
 
         SDL_RenderClear(renderer);
-        render_game(renderer, &plateau, grilleTexture, croixTexture, rondTexture);
+        render_game(renderer, &plateau, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture);
         SDL_RenderPresent(renderer);
-        //SDL_Delay(1000);
-
 
       }
 

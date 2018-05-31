@@ -17,6 +17,17 @@ void render_grid(SDL_Renderer *renderer, SDL_Texture* grilleTexture) {
 
 }
 
+void render_note(SDL_Renderer *renderer, SDL_Texture* noteTexture) {
+
+  //Affichage de grilleTexture
+  SDL_Rect position;
+  position.x = 0;
+  position.y = 0;
+  SDL_QueryTexture(noteTexture, NULL, NULL, &position.w, &position.h);
+  SDL_RenderCopy(renderer,noteTexture,NULL,&position);
+
+}
+
 void render_x(SDL_Renderer *renderer, int x, int y, SDL_Texture* croixTexture) {
 
   int c = matricex[x][y];
@@ -63,32 +74,33 @@ void render_running_state(SDL_Renderer *renderer, const board *plateau, SDL_Text
     render_board(renderer, plateau, croixTexture, rondTexture);
 }
 
-//render_game_over_state(renderer, plateau);
+void render_game_over_state(SDL_Renderer *renderer, SDL_Texture* noteTexture) {
+
+    render_note(renderer, noteTexture);
+}
 
 
-void render_game(SDL_Renderer *renderer, const board *plateau, SDL_Texture *grilleTexture, SDL_Texture* croixTexture, SDL_Texture* rondTexture) {
+void render_game(SDL_Renderer *renderer, const board *plateau, SDL_Texture *grilleTexture,
+   SDL_Texture* croixTexture, SDL_Texture* rondTexture,
+ SDL_Texture* x_winTexture, SDL_Texture* o_winTexture, SDL_Texture* tie_stateTexture) {
 
     if (plateau->state == RUNNING_STATE) {
       render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture);
     }
 
-    //switch (plateau->state) {
-    //case RUNNING_STATE:
-        //render_running_state(renderer, plateau);
-        //break;
+    if (plateau->state == PLAYER_X_WON_STATE) {
+      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture);
+      render_game_over_state(renderer, x_winTexture);
+    }
 
-    //case PLAYER_X_WON_STATE:
-        //render_game_over_state(renderer, plateau);
-        //break;
+    if (plateau->state == PLAYER_O_WON_STATE) {
+      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture);
+      render_game_over_state(renderer, o_winTexture);
+    }
 
-    //case PLAYER_O_WON_STATE:
-        //render_game_over_state(renderer, plateau, &PLAYER_O_COLOR);
-      //  break;
+    if (plateau->state == TIE_STATE) {
+      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture);
+      render_game_over_state(renderer, tie_stateTexture);
+    }
 
-  //  case TIE_STATE:
-        //ender_game_over_state(renderer, plateau, &TIE_COLOR);
-      //  break;
-
-  //  default: {}
-    //}
 }

@@ -30,14 +30,25 @@ int full_grid(board *plateau){
     return 0;
 }
 
+int tie_state(board *plateau){
+    for(int i = 0;i<9;i++){
+        for(int j = 0;j<9;j++){
+            if(plateau->tab[i].tab[j] == 0){
+              return 0;
+            }
+        }
+    }
+    return 1;
+}
+
 void game_over_condition(board *plateau) {
 
   if (win(plateau) == 1) {
         plateau->state = PLAYER_X_WON_STATE;
     } else if (win(plateau) == -1) {
         plateau->state = PLAYER_O_WON_STATE;
-    } else if (!full_grid(plateau)) {
-        plateau->state = RUNNING_STATE;
+    } else if (tie_state(plateau)) {
+        plateau->state = TIE_STATE;
     }
 }
 
@@ -135,23 +146,28 @@ void player_turn(board *plateau, int x, int y) {
       plateau->num_grid = num_case;
     }
 
-    //if (plateau->tab[num_grid].tab[num_case] == 0) {
-    //    plateau->num_grid = num_case;
-    //    plateau->last_grid = num_case;
-    //    plateau->tab[plateau->num_grid].tab[num_case] = plateau->player;
-    //    plateau->player *= -1;
-    //    plateau->num_grid = num_case;
-    //    game_over_condition(plateau);
-    //}
+    game_over_condition(plateau);
 }
-//void reset_game()
+
+void reset_game(board *plateau)
+{
+    plateau->player = PLAYER_X;
+    plateau->state = RUNNING_STATE;
+    plateau->num_grid = 4;
+
+    for(int i = 0;i<9;i++){
+        for(int j = 0;j<9;j++){
+            plateau->tab[i].tab[j] = 0;
+        }
+    }
+}
 
 void click_on_cell(board *plateau, int x, int y) {
 
     if (plateau->state == RUNNING_STATE) {
         player_turn(plateau, x, y);
     }
-    //else {
-        //reset_game(plateau);
-    //}
+    else {
+        reset_game(plateau);
+    }
 }
