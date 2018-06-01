@@ -166,8 +166,7 @@ void player_turn(board *plateau, int x, int y) {
     game_over_condition(plateau);
 }
 
-void reset_game(board *plateau)
-{
+void reset_game(board *plateau) {
     plateau->player = PLAYER_X;
     plateau->state = RUNNING_STATE;
     plateau->num_grid = rand() % 9;;
@@ -191,8 +190,8 @@ void click_on_cell(board *plateau, int x, int y) {
       if (plateau->vs == P_VS_IAH || plateau->vs == IAH_VS_IAH) {
         ia_turn(plateau, x, y);
       }
-
     }
+
     else {
         reset_game(plateau);
     }
