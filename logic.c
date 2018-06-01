@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <game.h>
 #include <logic.h>
 #include <ia.h>
@@ -169,7 +170,7 @@ void reset_game(board *plateau)
 {
     plateau->player = PLAYER_X;
     plateau->state = RUNNING_STATE;
-    plateau->num_grid = 4;
+    plateau->num_grid = rand() % 9;;
 
     for(int i = 0;i<9;i++){
         for(int j = 0;j<9;j++){

@@ -87,13 +87,21 @@ board turn_IA_simulation(board *simul){
                 test = turn_IA_alea(test);
                 winner = win(&test);
             }
-            switch(winner){
-                case -1:
-                    possible_val[i].gain +=1;
-                    break;
-                case 1:
-                    possible_val[i].perte +=1;
-                    break;
+            if (winner == -1) {
+              if (simul->player == -1) {
+                possible_val[i].gain +=1;
+              }
+              else{
+                possible_val[i].perte +=1;
+              }
+            }
+            if (winner == 1){
+              if (simul->player == -1) {
+                possible_val[i].perte +=1;
+              }
+              else{
+                possible_val[i].gain +=1;
+              }
             }
         }
     }
