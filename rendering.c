@@ -2,9 +2,28 @@
 
 #include <game.h>
 #include <rendering.h>
+#include <logic.h>
 
 int matricex[9][9] = { {60,120,180,60,120,180,60,120,180},{300,360,420,300,360,420,300,360,420},{540,600,660,540,600,660,540,600,660},{60,120,180,60,120,180,60,120,180},{300,360,420,300,360,420,300,360,420},{540,600,660,540,600,660,540,600,660},{60,120,180,60,120,180,60,120,180},{300,360,420,300,360,420,300,360,420},{540,600,660,540,600,660,540,600,660}};
 int matricey[9][9] = {{60,60,60,120,120,120,180,180,180},{60,60,60,120,120,120,180,180,180},{60,60,60,120,120,120,180,180,180},{300,300,300,360,360,360,420,420,420},{300,300,300,360,360,360,420,420,420},{300,300,300,360,360,360,420,420,420},{540,540,540,600,600,600,660,660,660},{540,540,540,600,600,600,660,660,660},{540,540,540,600,600,600,660,660,660}};
+
+void render_contour(SDL_Renderer *renderer, const board *plateau,
+  SDL_Texture* contour_xTexture, SDL_Texture* contour_oTexture){
+
+  SDL_Rect position;
+  position.x = matricex[plateau->num_grid][0] - 3;
+  position.y = matricey[plateau->num_grid][0] - 3;
+
+  if (plateau->player == PLAYER_X) {
+    SDL_QueryTexture(contour_xTexture, NULL, NULL, &position.w, &position.h);
+    SDL_RenderCopy(renderer,contour_xTexture,NULL,&position);
+  }
+  else{
+    SDL_QueryTexture(contour_oTexture, NULL, NULL, &position.w, &position.h);
+    SDL_RenderCopy(renderer,contour_oTexture,NULL,&position);
+  }
+
+}
 
 void render_grid(SDL_Renderer *renderer, SDL_Texture* grilleTexture) {
 
@@ -68,10 +87,16 @@ void render_board(SDL_Renderer *renderer, const board *plateau, SDL_Texture* cro
   }
 
 
-void render_running_state(SDL_Renderer *renderer, const board *plateau, SDL_Texture* grilleTexture, SDL_Texture* croixTexture, SDL_Texture* rondTexture) {
+void render_running_state(SDL_Renderer *renderer, const board *plateau,
+   SDL_Texture* grilleTexture, SDL_Texture* croixTexture,
+    SDL_Texture* rondTexture, SDL_Texture* contour_xTexture, SDL_Texture* contour_oTexture) {
 
     render_grid(renderer, grilleTexture);
     render_board(renderer, plateau, croixTexture, rondTexture);
+    if (!new_board(plateau)) {
+      render_contour(renderer, plateau, contour_xTexture, contour_oTexture);
+    }
+
 }
 
 void render_game_over_state(SDL_Renderer *renderer, SDL_Texture* noteTexture) {
@@ -81,25 +106,26 @@ void render_game_over_state(SDL_Renderer *renderer, SDL_Texture* noteTexture) {
 
 
 void render_game(SDL_Renderer *renderer, const board *plateau, SDL_Texture *grilleTexture,
-   SDL_Texture* croixTexture, SDL_Texture* rondTexture,
- SDL_Texture* x_winTexture, SDL_Texture* o_winTexture, SDL_Texture* tie_stateTexture) {
+   SDL_Texture* croixTexture, SDL_Texture* rondTexture, SDL_Texture* x_winTexture,
+   SDL_Texture* o_winTexture, SDL_Texture* tie_stateTexture,
+   SDL_Texture* contour_xTexture, SDL_Texture* contour_oTexture) {
 
     if (plateau->state == RUNNING_STATE) {
-      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture);
+      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture, contour_xTexture, contour_oTexture);
     }
 
     if (plateau->state == PLAYER_X_WON_STATE) {
-      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture);
+      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture, contour_xTexture, contour_oTexture);
       render_game_over_state(renderer, x_winTexture);
     }
 
     if (plateau->state == PLAYER_O_WON_STATE) {
-      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture);
+      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture, contour_xTexture, contour_oTexture);
       render_game_over_state(renderer, o_winTexture);
     }
 
     if (plateau->state == TIE_STATE) {
-      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture);
+      render_running_state(renderer, plateau, grilleTexture, croixTexture, rondTexture, contour_xTexture, contour_oTexture);
       render_game_over_state(renderer, tie_stateTexture);
     }
 

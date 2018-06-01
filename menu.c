@@ -9,8 +9,9 @@
 
 
 void game(board *plateau, SDL_Renderer *renderer, SDL_Texture* grilleTexture,
-  SDL_Texture* croixTexture, SDL_Texture* rondTexture,
-  SDL_Texture* x_winTexture, SDL_Texture* o_winTexture, SDL_Texture* tie_stateTexture);
+  SDL_Texture* croixTexture, SDL_Texture* rondTexture, SDL_Texture* x_winTexture,
+   SDL_Texture* o_winTexture, SDL_Texture* tie_stateTexture,
+   SDL_Texture* contour_xTexture, SDL_Texture* contour_oTexture);
 
 int main(int argc, char *argv[]){
 
@@ -24,6 +25,8 @@ int main(int argc, char *argv[]){
   SDL_Surface* x_winImg= SDL_LoadBMP("img/win_x_note.bmp");
   SDL_Surface* o_winImg= SDL_LoadBMP("img/win_o_note.bmp");
   SDL_Surface* tie_stateImg= SDL_LoadBMP("img/tie_state_note.bmp");
+  SDL_Surface* contour_xImg= SDL_LoadBMP("img/contour_x.bmp");
+  SDL_Surface* contour_oImg= SDL_LoadBMP("img/contour_o.bmp");
 
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0 ){ //Gestion des erreurs d'init
@@ -84,6 +87,14 @@ int main(int argc, char *argv[]){
   SDL_Texture* tie_stateTexture = SDL_CreateTextureFromSurface(renderer,tie_stateImg);
   SDL_FreeSurface(tie_stateImg);
 
+  // La texture du contour
+  SDL_Texture* contour_xTexture = SDL_CreateTextureFromSurface(renderer,contour_xImg);
+  SDL_FreeSurface(contour_xImg);
+
+  // La texture du contour
+  SDL_Texture* contour_oTexture = SDL_CreateTextureFromSurface(renderer,contour_oImg);
+  SDL_FreeSurface(contour_oImg);
+
   //La texture menuTexture contient maintenant l'image menuImg
   SDL_Texture* menuTexture = SDL_CreateTextureFromSurface(renderer,menuImg);
 
@@ -120,33 +131,34 @@ int main(int argc, char *argv[]){
                     plateau.vs = P_VS_P;
                     game(&plateau, renderer, grilleTexture,
                       croixTexture, rondTexture,
-                      x_winTexture, o_winTexture, tie_stateTexture);
+                      x_winTexture, o_winTexture, tie_stateTexture,
+                       contour_xTexture, contour_oTexture);
 
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 256 <= a && 522 >= a && 398 <= b && 433 >= b){
                     printf("P_VS_IAE\n");
                     plateau.vs = P_VS_IAE;
-                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture);
+                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 255 <= a && 524 >= a && 468 <= b && 498 >= b){
                     printf("P_VS_IAH\n");
                     plateau.vs = P_VS_IAH;
-                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture);
+                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 246 <= a && 533 >= a && 532 <= b && 560 >= b){
                     printf("IAE_VS_IAH\n");
                     plateau.vs = IAE_VS_IAH;
-                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture);
+                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 244 <= a && 531 >= a && 590 <= b && 626 >= b){
                     printf("IAE_VS_IAE\n");
                     plateau.vs = IAE_VS_IAE;
-                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture);
+                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 244 <= a && 534 >= a && 654 <= b && 683 >= b){
                     printf("IAH_VS_IAH\n");
                     plateau.vs = IAH_VS_IAH;
-                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture);
+                    game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   break;
             default: {}
@@ -176,8 +188,9 @@ int main(int argc, char *argv[]){
 }
 
 void game(board *plateau, SDL_Renderer *renderer, SDL_Texture* grilleTexture,
-  SDL_Texture* croixTexture, SDL_Texture* rondTexture,
-  SDL_Texture* x_winTexture, SDL_Texture* o_winTexture, SDL_Texture* tie_stateTexture){
+  SDL_Texture* croixTexture, SDL_Texture* rondTexture, SDL_Texture* x_winTexture,
+   SDL_Texture* o_winTexture, SDL_Texture* tie_stateTexture,
+    SDL_Texture* contour_xTexture, SDL_Texture* contour_oTexture){
 
   SDL_Event e;
   while (plateau->state != QUIT_STATE) {
@@ -203,12 +216,6 @@ void game(board *plateau, SDL_Renderer *renderer, SDL_Texture* grilleTexture,
             d = b - (b % 60);
             fprintf(stdout, "Modulo : %d;%d\n",c,d);
 
-            //if (plateau->state == PLAYER_X_WON_STATE) {
-            //  if (319 <= a && 460 >= a && 724 <= b && 771 >= b) {
-            //    plateau->state = QUIT_STATE;
-            //  }
-            //}
-
             if ( plateau->state == 0 && (c!=0) && (c!=240) && (c!=480) && (c!=720) && (d!=0) && (d!=240) && (d!=480) && (d!=720) ) {
               click_on_cell(plateau, c, d);
             }
@@ -223,7 +230,7 @@ void game(board *plateau, SDL_Renderer *renderer, SDL_Texture* grilleTexture,
     }
 
     SDL_RenderClear(renderer);
-    render_game(renderer, plateau, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture);
+    render_game(renderer, plateau, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
     SDL_RenderPresent(renderer);
 
   }
