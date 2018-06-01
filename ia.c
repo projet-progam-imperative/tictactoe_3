@@ -1,21 +1,37 @@
-#include <stdio.h>
-#include <IA.h>
-#include <grid.h>
-#include <IAaleatoire.h>
+#include <stdlib.h>
+#include <ia.h>
+#include <ia_aleatoire.h>
+#include <logic.h>
+#include <game.h>
+
+//simule le tour de l'autre joueur
+board sim_player_turn(board plateau, int num_case){
+    if (full_grid(&plateau)) {
+      if (plateau.tab[plateau.num_grid].tab[num_case] == 0) {
+        plateau.last_grid = plateau.num_grid;
+        plateau.tab[plateau.num_grid].tab[num_case] = plateau.player;
+        plateau.player *= -1;
+        plateau.num_grid = num_case;
+      }
+    }else{
+      plateau.num_grid = num_case;
+    }
+  return plateau;
+}
 
 //fonction qui test si deux plateaux sont egaux
-int board_equal(board a, board b){
+int board_equal(board a, board *b){
     int i, j;
     for(i = 0;i<9;i++){
         for(j = 0;j<9;j++){
-            if(a.tab[i].tab[j] != b.tab[i].tab[j]){
+            if(a.tab[i].tab[j] != b->tab[i].tab[j]){
                 return 0;
             }
         }
     }
-    if(a.num_grid != b.num_grid) return 0;
-    if(a.player != b.player) return 0;
-    if(a.last_grid != b.last_grid) return 0;
+    if(a.num_grid != b->num_grid) return 0;
+    if(a.player != b->player) return 0;
+    if(a.last_grid != b->last_grid) return 0;
     return 1;
 }
 
@@ -41,11 +57,11 @@ int decision(int taille, esperance* tab){
 }
 
 //fonction qui applique la decision de l'IA "réfléchi" sur le plateau
-board turn_IA_simulation(board simul){
+board turn_IA_simulation(board *simul){
     int i,taille = 0;
     board possible_tmp[9];
     for(i=0;i<9;i++){
-        possible_tmp[i] = turn(simul,i);
+        possible_tmp[i] = sim_player_turn(*simul,i);
         if(board_equal(possible_tmp[i], simul) != 1){
             taille += 1;
         }
@@ -69,39 +85,42 @@ board turn_IA_simulation(board simul){
             int winner = 0;
             while(winner == 0){
                 test = turn_IA_alea(test);
-                winner = win(test);
+                winner = win(&test);
             }
-            switch(winner){
-                case -1:
-                    possible_val[i].gain +=1;
-                    break;
-                case 1:
-                    possible_val[i].perte +=1;
-                    break;
+            if (winner == -1) {
+              if (simul->player == -1) {
+                possible_val[i].gain +=1;
+              }
+              else{
+                possible_val[i].perte +=1;
+              }
+            }
+            if (winner == 1){
+              if (simul->player == -1) {
+                possible_val[i].perte +=1;
+              }
+              else{
+                possible_val[i].gain +=1;
+              }
             }
         }
     }
-    return simul = possible[decision(taille, possible_val)];
+    simul = &possible[decision(taille, possible_val)];
+    return *simul;
 }
 
-//fonction qui gère les tours en joueur vs IA "réfléchi"
-int game_JCP_IA(){
-    board plateau;
-    plateau = init(plateau);
-    int c=0;
-    int winner = 0;
-    while(winner == 0){
-        if(plateau.player == 1){
-            draw(plateau);
-            printf("entrer le num de la case (0 -> 8)");
-            scanf("%d",&c);
-            plateau = turn(plateau,c);
-        }else{
-            plateau = turn_IA_simulation(plateau);
-        }
-        winner = win(plateau);
-    }
-    draw(plateau);
-    return winner;
-}
 
+void ia_turn(board *plateau, int x, int y) {
+
+    if (plateau->player == PLAYER_X && plateau->vs == P_VS_IAH) {
+
+        player_turn(plateau, x, y);
+  }
+
+  else {
+    *plateau = turn_IA_simulation(plateau);
+    game_over_condition(plateau);
+  }
+
+
+}
