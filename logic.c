@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <game.h>
 #include <logic.h>
 #include <ia.h>
@@ -147,9 +148,16 @@ void player_turn(board *plateau, int x, int y) {
 
     int num_case = get_case(x, y);
     int num_grid = get_grid(x, y);
+    printf("grid click = %d\n",num_grid);
+    printf("grid = %d\n",plateau->num_grid);
 
     if (new_board(plateau)) {
       plateau->num_grid = num_grid;
+    }else{ 
+        if(num_grid != plateau->num_grid){
+            printf("blabla");
+            return;
+        }
     }
 
     if (full_grid(plateau)) {
