@@ -1,6 +1,6 @@
 #ifndef IAaleatoire_H
 #define IAaleatoire_H
-    #include<grid.h>
+    #include<game.h>
     board turn_IA_alea(board main_board);
-    int game_JCP_alea();
+    void ia_alea_turn(board *plateau, int x, int y);
 #endif // IAaleatoireH_
