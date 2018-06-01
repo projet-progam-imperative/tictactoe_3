@@ -13,12 +13,12 @@ board turn_IA_alea(board main_board){
 
 void ia_alea_turn(board *plateau, int x, int y){
 
-  if (plateau->player == PLAYER_X && plateau->vs == P_VS_IAE) {
-    player_turn(plateau, x, y);
-  }
-
   if (plateau->player == PLAYER_O && plateau->vs == IAE_VS_IAH) {
     ia_turn(plateau, x, y);
+  }
+  
+  if (plateau->player == PLAYER_X && plateau->vs == P_VS_IAE) {
+    player_turn(plateau, x, y);
   }
 
   else {
