@@ -134,7 +134,6 @@ int main(int argc, char *argv[]){
                   //Choix des différents modes de jeu
 
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 263 <= a && 518 >= a && 334 <= b && 367 >= b){
-                    printf("P_VS_P\n");
                     plateau.vs = P_VS_P;
                     game(&plateau, renderer, grilleTexture,
                       croixTexture, rondTexture,
@@ -143,27 +142,22 @@ int main(int argc, char *argv[]){
 
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 256 <= a && 522 >= a && 398 <= b && 433 >= b){
-                    printf("P_VS_IAE\n");
                     plateau.vs = P_VS_IAE;
                     game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 255 <= a && 524 >= a && 468 <= b && 498 >= b){
-                    printf("P_VS_IAH\n");
                     plateau.vs = P_VS_IAH;
                     game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 246 <= a && 533 >= a && 532 <= b && 560 >= b){
-                    printf("IAE_VS_IAH\n");
                     plateau.vs = IAE_VS_IAH;
                     game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 244 <= a && 531 >= a && 590 <= b && 626 >= b){
-                    printf("IAE_VS_IAE\n");
                     plateau.vs = IAE_VS_IAE;
                     game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 244 <= a && 534 >= a && 654 <= b && 683 >= b){
-                    printf("IAH_VS_IAH\n");
                     plateau.vs = IAH_VS_IAH;
                     game(&plateau, renderer, grilleTexture, croixTexture, rondTexture, x_winTexture, o_winTexture, tie_stateTexture, contour_xTexture, contour_oTexture);
                   }
@@ -218,10 +212,8 @@ void game(board *plateau, SDL_Renderer *renderer, SDL_Texture* grilleTexture,
             a = e.button.x;
             b = e.button.y;
 
-            fprintf(stdout, "Position de la souris : %d;%d\n",a,b);
             c = a - (a % 60);
             d = b - (b % 60);
-            fprintf(stdout, "Modulo : %d;%d\n",c,d);
 
             if ( plateau->state == 0 && (c!=0) && (c!=240) && (c!=480) && (c!=720) && (d!=0) && (d!=240) && (d!=480) && (d!=720) ) {
               click_on_cell(plateau, c, d);
