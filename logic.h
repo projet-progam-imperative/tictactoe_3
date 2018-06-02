@@ -3,6 +3,8 @@
 
 #include<game.h>
 
+// Codé par Leo et Thomas
+
 void game_over_condition(board *plateau);
 void click_on_cell(board *plateau, int x, int y);
 int win(board *plateau);

@@ -1,6 +1,8 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+// Codé par Leo et Thomas
+
 #define EMPTY 0
 #define PLAYER_X 1
 #define PLAYER_O -1

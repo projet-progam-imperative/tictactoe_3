@@ -5,6 +5,7 @@
 #include <ia.h>
 #include <ia_aleatoire.h>
 
+// Codé par Leo
 int win(board *plateau){
     int a, b, c, d, e, f, g, h;
     a = plateau->tab[plateau->last_grid].tab[0] + plateau->tab[plateau->last_grid].tab[1] + plateau->tab[plateau->last_grid].tab[2];
@@ -24,6 +25,7 @@ int win(board *plateau){
     return 0;
 }
 
+// Codé par Leo
 int full_grid(board *plateau){
     int i;
     for(i=0;i<9;i++){
@@ -34,6 +36,7 @@ int full_grid(board *plateau){
     return 0;
 }
 
+// Codé par Thomas
 int new_board(board *plateau){
     for(int i = 0;i<9;i++){
         for(int j = 0;j<9;j++){
@@ -45,6 +48,7 @@ int new_board(board *plateau){
     return 1;
 }
 
+// Codé par Thomas
 int tie_state(board *plateau){
     for(int i = 0;i<9;i++){
         for(int j = 0;j<9;j++){
@@ -56,6 +60,7 @@ int tie_state(board *plateau){
     return 1;
 }
 
+// Codé par Thomas
 void game_over_condition(board *plateau) {
 
   if (win(plateau) == 1) {
@@ -67,6 +72,7 @@ void game_over_condition(board *plateau) {
     }
 }
 
+// Codé par Thomas
 int get_case(int x, int y){
 
     int a[3];
@@ -113,6 +119,7 @@ int get_case(int x, int y){
   return b[2];
 }
 
+// Codé par Thomas
 int get_grid(int x, int y){
 
   if (x < 240 && y < 240) {
@@ -144,18 +151,16 @@ int get_grid(int x, int y){
   }
 }
 
+// Codé par Leo et Thomas
 void player_turn(board *plateau, int x, int y) {
 
     int num_case = get_case(x, y);
     int num_grid = get_grid(x, y);
-    printf("grid click = %d\n",num_grid);
-    printf("grid = %d\n",plateau->num_grid);
 
     if (new_board(plateau)) {
       plateau->num_grid = num_grid;
-    }else{ 
+    }else{
         if(num_grid != plateau->num_grid){
-            printf("blabla");
             return;
         }
     }
@@ -174,6 +179,7 @@ void player_turn(board *plateau, int x, int y) {
     game_over_condition(plateau);
 }
 
+// Codé par Thomas
 void reset_game(board *plateau) {
     plateau->player = PLAYER_X;
     plateau->state = RUNNING_STATE;
@@ -186,6 +192,7 @@ void reset_game(board *plateau) {
     }
 }
 
+// Codé par Thomas
 void click_on_cell(board *plateau, int x, int y) {
 
     if (plateau->state == RUNNING_STATE) {

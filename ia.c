@@ -5,6 +5,7 @@
 #include <game.h>
 
 //simule le tour de l'autre joueur
+// Codé par Leo
 board sim_player_turn(board plateau, int num_case){
     if (full_grid(&plateau)) {
       if (plateau.tab[plateau.num_grid].tab[num_case] == 0) {
@@ -19,6 +20,7 @@ board sim_player_turn(board plateau, int num_case){
   return plateau;
 }
 
+// Codé par Leo
 //fonction qui test si deux plateaux sont egaux
 int board_equal(board a, board *b){
     int i, j;
@@ -35,6 +37,7 @@ int board_equal(board a, board *b){
     return 1;
 }
 
+// Codé par Leo
 //fonction qui permet a l'IA de choisir la case sur laquelle jouer
 int decision(int taille, esperance* tab){
     int index, i;
@@ -56,6 +59,7 @@ int decision(int taille, esperance* tab){
     return index;
 }
 
+// Codé par Leo
 //fonction qui applique la decision de l'IA "réfléchi" sur le plateau
 board turn_IA_simulation(board *simul){
     int i,taille = 0;
@@ -109,7 +113,7 @@ board turn_IA_simulation(board *simul){
     return *simul;
 }
 
-
+// Codé par Thomas
 void ia_turn(board *plateau, int x, int y) {
 
     if (plateau->player == PLAYER_X && plateau->vs == P_VS_IAH) {

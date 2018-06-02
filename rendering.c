@@ -4,21 +4,23 @@
 #include <rendering.h>
 #include <logic.h>
 
+// Fichié codé par Thomas
+
 int matricex[9][9] = { {60,120,180,60,120,180,60,120,180},{300,360,420,300,360,420,300,360,420},{540,600,660,540,600,660,540,600,660},{60,120,180,60,120,180,60,120,180},{300,360,420,300,360,420,300,360,420},{540,600,660,540,600,660,540,600,660},{60,120,180,60,120,180,60,120,180},{300,360,420,300,360,420,300,360,420},{540,600,660,540,600,660,540,600,660}};
 int matricey[9][9] = {{60,60,60,120,120,120,180,180,180},{60,60,60,120,120,120,180,180,180},{60,60,60,120,120,120,180,180,180},{300,300,300,360,360,360,420,420,420},{300,300,300,360,360,360,420,420,420},{300,300,300,360,360,360,420,420,420},{540,540,540,600,600,600,660,660,660},{540,540,540,600,600,600,660,660,660},{540,540,540,600,600,600,660,660,660}};
 
-void render_contour(SDL_Renderer *renderer, const board *plateau,
+void render_contour(SDL_Renderer *renderer, board *plateau,
   SDL_Texture* contour_xTexture, SDL_Texture* contour_oTexture){
 
   SDL_Rect position;
   position.x = matricex[plateau->num_grid][0] - 3;
   position.y = matricey[plateau->num_grid][0] - 3;
 
-  if (plateau->player == PLAYER_X) {
+  if (plateau->player == PLAYER_X && (plateau->vs == P_VS_P || plateau->vs == P_VS_IAE || plateau->vs == P_VS_IAH)) {
     SDL_QueryTexture(contour_xTexture, NULL, NULL, &position.w, &position.h);
     SDL_RenderCopy(renderer,contour_xTexture,NULL,&position);
   }
-  else{
+  if (plateau->player == PLAYER_O && plateau->vs == P_VS_P){
     SDL_QueryTexture(contour_oTexture, NULL, NULL, &position.w, &position.h);
     SDL_RenderCopy(renderer,contour_oTexture,NULL,&position);
   }
@@ -71,7 +73,7 @@ void render_o(SDL_Renderer *renderer, int x, int y, SDL_Texture* rondTexture) {
     SDL_RenderCopy(renderer,rondTexture,NULL,&position);
 }
 
-void render_board(SDL_Renderer *renderer, const board *plateau, SDL_Texture* croixTexture, SDL_Texture* rondTexture) {
+void render_board(SDL_Renderer *renderer, board *plateau, SDL_Texture* croixTexture, SDL_Texture* rondTexture) {
 
     for (int i = 0; i < 9; ++i) {
         for (int j = 0; j < 9; ++j) {
@@ -87,7 +89,7 @@ void render_board(SDL_Renderer *renderer, const board *plateau, SDL_Texture* cro
   }
 
 
-void render_running_state(SDL_Renderer *renderer, const board *plateau,
+void render_running_state(SDL_Renderer *renderer, board *plateau,
    SDL_Texture* grilleTexture, SDL_Texture* croixTexture,
     SDL_Texture* rondTexture, SDL_Texture* contour_xTexture, SDL_Texture* contour_oTexture) {
 
@@ -105,7 +107,8 @@ void render_game_over_state(SDL_Renderer *renderer, SDL_Texture* noteTexture) {
 }
 
 
-void render_game(SDL_Renderer *renderer, const board *plateau, SDL_Texture *grilleTexture,
+
+void render_game(SDL_Renderer *renderer, board *plateau, SDL_Texture *grilleTexture,
    SDL_Texture* croixTexture, SDL_Texture* rondTexture, SDL_Texture* x_winTexture,
    SDL_Texture* o_winTexture, SDL_Texture* tie_stateTexture,
    SDL_Texture* contour_xTexture, SDL_Texture* contour_oTexture) {

@@ -2,6 +2,8 @@
 #define IA_H
     #include<game.h>
 
+    // Codé par Leo et Thomas
+
     typedef struct{
         float gain;
         float perte;

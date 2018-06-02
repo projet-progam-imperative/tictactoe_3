@@ -7,6 +7,11 @@
 #include <logic.h>
 #include <rendering.h>
 
+// Inspiration pour l'utilisation de SDL
+//https://github.com/tsoding/profun/tree/master/procedural
+
+// Fichier codé par Thomas
+
 
 void game(board *plateau, SDL_Renderer *renderer, SDL_Texture* grilleTexture,
   SDL_Texture* croixTexture, SDL_Texture* rondTexture, SDL_Texture* x_winTexture,
@@ -107,10 +112,10 @@ int main(int argc, char *argv[]){
   if (fenetre){
 
     int cont = 1;
-    /* Détermine si on continue la boucle principale */
+    /* Boucle principale */
       while ( cont != 0 ){
         plateau.state = MENU_STATE;
-        // On demande à la SDL de mettre à jour les états sur la souris
+        // Gestion des événements
           SDL_Event e;
           while (SDL_PollEvent(&e)) {
               int a;
@@ -125,6 +130,8 @@ int main(int argc, char *argv[]){
                 case SDL_MOUSEBUTTONDOWN:
                   a = e.button.x;
                   b = e.button.y;
+
+                  //Choix des différents modes de jeu
 
                   if(SDL_GetMouseState(&a, &b) & SDL_BUTTON(1) && 263 <= a && 518 >= a && 334 <= b && 367 >= b){
                     printf("P_VS_P\n");
@@ -236,14 +243,8 @@ void game(board *plateau, SDL_Renderer *renderer, SDL_Texture* grilleTexture,
   }
 }
 
+//Initialisation
 board init(board main_board){
-    int i,j;
-    for(i = 0;i<9;i++){
-        for(j = 0;j<9;j++){
-            main_board.tab[i].tab[j] = 0;
-        }
-    }
-    main_board.player = PLAYER_X;
     main_board.state = MENU_STATE;
     return main_board;
 }
